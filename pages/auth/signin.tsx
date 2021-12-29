@@ -1,9 +1,16 @@
-import { getProviders, signIn } from "next-auth/react";
+import { getProviders, signIn, useSession } from "next-auth/react";
 import HeadComponent from '../../components/HeadComponent';
 import {BsGoogle, BsGithub} from 'react-icons/bs';
+import {useRouter} from "next/router";
 const signInLogo = require('../../assets/sign-in-image.svg')
 
 function signin({ providers }) {
+
+  const router = useRouter()
+  const {data: session, status} = useSession()
+
+  if(session) router.replace('/')
+
   return (
     <>
       <HeadComponent title={'Login'} />

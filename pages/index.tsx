@@ -5,10 +5,12 @@ import { useRecoilState } from "recoil";
 import { userProfile } from "../atom/userProfileAtom";
 import LoadingComponent from "../components/LoadingComponent";
 import Navbar from "../components/Navbar";
+import { allPostsData } from "../atom/allPostsDataAtom";
 
 const Home = () => {
   const { data: session, status } = useSession();
   const [user, setUser] = useRecoilState(userProfile);
+  const [allPosts, setAllPosts] = useRecoilState(allPostsData)
 
   useEffect(() => {
     console.log(user);

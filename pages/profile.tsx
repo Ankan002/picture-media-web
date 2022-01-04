@@ -1,14 +1,20 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useSession} from 'next-auth/react'
 import LoadingComponent from "../components/LoadingComponent";
 import HeadComponent from "../components/HeadComponent";
 import ProfileHeader from "../components/ProfileHeader";
 import ProfileDetail from "../components/ProfileDetail";
+import { useRouter } from "next/router";
 
 
 const Profile = () => {
 
-    const {status} = useSession()
+    const {data: session ,status} = useSession()
+    const router = useRouter()
+
+    useEffect(() => {
+        if(!session) router.replace('/auth/signin')
+    }, [session])
 
     return(
         <>

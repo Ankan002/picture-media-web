@@ -4,6 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRecoilState } from "recoil";
 import { userProfile } from "../../atom/userProfileAtom";
+import { allPostsData } from "../../atom/allPostsDataAtom";
+import { userPostsData } from "../../atom/userPostsDataAtom";
 import axios from "axios";
 
 const CreatePostForm = () => {
@@ -12,6 +14,8 @@ const CreatePostForm = () => {
   const [isUploading, setIsUploading] = useState(false)
   const [postTitle, setPostTitle] = useState('')
   const [profile, setProfile] = useRecoilState<any>(userProfile)
+  const [allPosts, setAllPosts] = useRecoilState(allPostsData)
+  const [usersPosts, setUsersPosts] = useRecoilState(userPostsData)
 
   const notify = (message: string, error: boolean) => {
       if(error){
@@ -72,16 +76,32 @@ const CreatePostForm = () => {
         return
     }
 
-    const response = await postImage({photo: selectedFileToUpload, title: postTitle, id: profile.profile.id})
+    const response = await postImage({photo: selectedFileToUpload, title: postTitle, id: profile?.id})
+
+    if (!response?.success){
+      notify(response?.message, true)
+      setIsUploading(false)
+      return
+    }
+
+    const newUserPosts = [response?.post].concat(usersPosts)
+    setUsersPosts(newUserPosts)
+
+    const user = {
+      id: profile?.id,
+      username: profile?.username,
+      image: profile?.image
+    }
 
     console.log(response)
 
-    //TODO: Once we get the post data we need to add the data to the fetched post for main page and profile data....
+    const modifiedResponse = {...response?.post, user}
+
+    const newAllPosts = [modifiedResponse].concat(allPosts)
+    setAllPosts(newAllPosts)
     
-    if (!response?.success){
-      notify(response?.message, true)
-    }
-    else if(response?.success){
+    
+    if(response?.success){
       notify('Post Created', false)
     }
 

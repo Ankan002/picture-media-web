@@ -5,6 +5,7 @@ import HeadComponent from "../components/HeadComponent";
 import ProfileHeader from "../components/ProfileHeader";
 import ProfileDetail from "../components/ProfileDetail";
 import { useRouter } from "next/router";
+import ProfilePostsBody from "../components/ProfilePostsBody";
 
 
 const Profile = () => {
@@ -29,6 +30,9 @@ const Profile = () => {
                         <HeadComponent title="Profile" />
                         <ProfileHeader />
                         <ProfileDetail />
+                        <div className="w-full flex-grow">
+                            <ProfilePostsBody />
+                        </div>
                     </div>
                 )
             }

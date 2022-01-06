@@ -14,8 +14,8 @@ const CreatePostForm = () => {
   const [isUploading, setIsUploading] = useState(false)
   const [postTitle, setPostTitle] = useState('')
   const [profile, setProfile] = useRecoilState<any>(userProfile)
-  const [allPosts, setAllPosts] = useRecoilState(allPostsData)
-  const [usersPosts, setUsersPosts] = useRecoilState(userPostsData)
+  const [allPosts, setAllPosts] = useRecoilState<any>(allPostsData)
+  const [usersPosts, setUsersPosts] = useRecoilState<any>(userPostsData)
 
   const notify = (message: string, error: boolean) => {
       if(error){
@@ -84,8 +84,8 @@ const CreatePostForm = () => {
       return
     }
 
-    const newUserPosts = [response?.post].concat(usersPosts)
-    setUsersPosts(newUserPosts)
+    const newUserPosts = [response?.post].concat(usersPosts?.posts)
+    setUsersPosts({...usersPosts, posts: newUserPosts})
 
     const user = {
       id: profile?.id,
@@ -97,8 +97,8 @@ const CreatePostForm = () => {
 
     const modifiedResponse = {...response?.post, user}
 
-    const newAllPosts = [modifiedResponse].concat(allPosts)
-    setAllPosts(newAllPosts)
+    const newAllPosts = [modifiedResponse].concat(allPosts?.posts)
+    setAllPosts({...allPosts, posts: newAllPosts})
     
     
     if(response?.success){

@@ -2,7 +2,7 @@ import React from "react";
 import { useSession } from "next-auth/react";
 import HeadComponent from "../components/HeadComponent";
 import LoadingComponent from "../components/LoadingComponent";
-import CreatePostHeader from "../components/CreatePostHeader";
+import CommonHeader from "../components/CommonHeader";
 import CreatePostForm from "../components/CreatePostForm";
 
 const CreatePost = ()  => {
@@ -20,7 +20,7 @@ const CreatePost = ()  => {
                 ) : (
                     <div className="min-h-screen w-full flex flex-col lg:px-8 md:px-6 px-5 lg:pt-8 md:pt-6 pt-5">
                         <HeadComponent title="Create Post" />
-                        <CreatePostHeader />
+                        <CommonHeader />
                         <CreatePostForm />
                     </div>
                 )

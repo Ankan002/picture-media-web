@@ -1,42 +1,19 @@
 import React from 'react'
-import {RiDeleteBinFill} from 'react-icons/ri'
-import {AiFillHeart, AiOutlineHeart} from 'react-icons/ai'
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { useRecoilState } from 'recoil'
 import { userProfile } from '../../atom/userProfileAtom'
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
-export type ProfilePostCardProps = {
-    userId: string | number,
+export type UserProfilePostCardProps = {
     photo: string | null,
     title: string | null,
     likes: string | number | null,
     liked_users: Array<string | number | null>
 }
 
-const ProfilePostCard = (props: ProfilePostCardProps) => {
+const UserProfilePostCard = (props: UserProfilePostCardProps) => {
 
-    const {userId, photo, title, liked_users, likes} = props
+    const {photo, title, liked_users, likes} = props
     const [user, setUser] = useRecoilState<any>(userProfile)
-
-    const onDustbinClick = () => {
-        confirmAlert({
-            title: 'Confirmation',
-            message: 'Are you sure to Delete this post.',
-            buttons: [
-              {
-                label: 'Yes',
-                onClick: () => console.log('Delete')
-              },
-              {
-                label: 'No',
-                onClick: () => console.log('Cancelled')
-              }
-            ]
-        });
-    }
-
-    console.log(typeof(userId))
 
     return (
         <div className='p-5  w-full flex flex-col items-center'>
@@ -48,21 +25,7 @@ const ProfilePostCard = (props: ProfilePostCardProps) => {
                     <h1 className='text-white text-center lg:text-lg md:text-base text-sm font-semibold font-sans'>{title}</h1>
                 </div>
             </div>
-            <div 
-                className={
-                    (user?.id === userId)  ? 'w-full flex justify-between' : 'w-full flex justify-end'
-                }
-            >
-                <div className='flex items-center justify-center'>
-                    {
-                        (user?.id === userId) && (
-                            <button className='p-2 flex items-center justify-center' onClick={onDustbinClick}>
-                                <RiDeleteBinFill className='lg:text-2xl md:text-xl text-lg text-red-500' />
-                            </button>
-                            
-                        )
-                    }
-                </div>
+            <div className='w-full flex justify-end'>
                 <div className='flex items-center'>
                     <>
                     {
@@ -86,4 +49,4 @@ const ProfilePostCard = (props: ProfilePostCardProps) => {
     )
 }
 
-export default ProfilePostCard
+export default UserProfilePostCard

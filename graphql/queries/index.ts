@@ -51,3 +51,20 @@ export const GET_POSTS_BY_USER = gql`
         }
     }
 `
+
+
+export const GET_USER_BY_ID = gql`
+    query( $userId: ID!){
+        userProfile(userId: $userId) {
+          user {
+            email
+            name
+            username
+            image
+            githubProfile
+            likes
+          }
+          success
+        }
+    }
+`

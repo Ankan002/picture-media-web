@@ -11,11 +11,6 @@ import HomeBody from "../components/HomeBody";
 const Home = () => {
   const { data: session, status } = useSession();
   const [user, setUser] = useRecoilState(userProfile);
-  const [allPosts, setAllPosts] = useRecoilState(allPostsData)
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   return (
     <>

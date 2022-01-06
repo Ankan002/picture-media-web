@@ -1,48 +1,37 @@
 import React from 'react'
 import LoadingComponent from '../LoadingComponent'
 import { useRecoilState } from 'recoil'
-import { userPostsLoading } from '../../atom/userPostsLoadingAtom'
 import { userPostsData } from '../../atom/userPostsDataAtom'
 import ProfilePostCard from '../ProfilePostCard'
 const emptyLogo = require('../../assets/empty.svg')
 
+
+
 const ProfilePostsBody = () => {
-
-    const [isUserPostsLoading, setIsUserPostsLoading] = useRecoilState(userPostsLoading)
-    const [userPosts, setUserPosts] = useRecoilState(userPostsData)
-    console.log(userPosts)
-
-    // {
-    //     id: "61d440dd80520109ccc6134c"
-    //     liked_users: []
-    //     likes: 0
-    //     photo: "http://res.cloudinary.com/exponents/image/upload/v1641300190/q0hazrfuxrxxqgixwvih.png"
-    //     title: "My React Native Certification"
-    //     user: "61c845d3fe10e5288eb9d4cd"
-    // }
+    const [userPosts, setUserPosts] = useRecoilState<any>(userPostsData)
 
     return (
         <div className='w-full flex-grow flex'>
             {
-                isUserPostsLoading ? (
-                    <div className='w-full flex-grow'>
+                (userPosts === undefined || Object.keys(userPosts).length === 0) ? (
+                    <div className='w-full flex-grow flex items-center justify-center'>
                         <LoadingComponent />
                     </div>
                 ) : (
                     <>
                     {
-                        (userPosts.length === 0) ? (
+                        (userPosts?.success && (userPosts?.posts).length === 0) ? (
                             <div className='w-full flex-grow flex flex-col items-center justify-center'>
                                 <img src={emptyLogo.default.src} alt="" className='lg:w-80 lg:h-80 md:w-80 md:h-80 h-40 w-40' />
                                 <h1 className='lg:text-xl md:text-xl text-sm text-red-500 font-bold text-center'>
-                                    Waiting for you to upload something
+                                    Post Something To See Here
                                 </h1>
                             </div>
                         ): (
-                            <div className='w-full flex-grow flex flex-wrap'>
+                            <div className='w-full lg:masonry-5-col md:masonry-3-col sm:masonry-2-col masonry-1-col'>
                                 {
-                                    userPosts.map(userPost => (
-                                        <div key={userPost?.id} className='lg:w-1/4 md:w-1/2 w-full'>
+                                    (userPosts.posts).map((userPost: any) => (
+                                        <div key={userPost?.id} className='w-full break-inside'>
                                             <ProfilePostCard 
                                                 userId={userPost?.user} 
                                                 likes={userPost?.likes}

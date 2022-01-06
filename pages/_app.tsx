@@ -11,8 +11,6 @@ import { useRecoilState } from 'recoil';
 import { userProfile } from '../atom/userProfileAtom';
 import { allPostsData } from '../atom/allPostsDataAtom';
 import { userPostsData } from '../atom/userPostsDataAtom';
-import { allPostsLoading } from '../atom/allPostsLoadingAtom';
-import { userPostsLoading } from '../atom/userPostsLoadingAtom';
 
 const MyApp = ({ Component, pageProps }) => {
   return (
@@ -35,8 +33,6 @@ const GetProfile = ({children}) => {
   const [user, setUser] = useRecoilState(userProfile)
   const [allPosts, setAllPosts] = useRecoilState(allPostsData)
   const [usersAllPosts, setUsersAllPosts] = useRecoilState(userPostsData)
-  const [isAllPostsLoading, setIsAllPostsLoading] = useRecoilState(allPostsLoading)
-  const [isUserPostsLoading, setIsUserPostsLoading] = useRecoilState(userPostsLoading)
 
   const [fetchUser, {data: result, loading, error}] = useLazyQuery(GET_USER)
   const [fetchAllPosts, {data: Posts, loading: postsLoading, error: postsError}] = useLazyQuery(GET_ALL_POSTS)
@@ -47,14 +43,12 @@ const GetProfile = ({children}) => {
     if (status === 'unauthenticated') router.replace('/auth/signin')
     if (status === 'loading') return
     if (status === 'authenticated'){
-      setIsAllPostsLoading(true)
       fetchUser({
         variables: {
           providerId: data.accessToken
         }
       })
       fetchAllPosts()
-      setIsAllPostsLoading(false)
     }
   }, [status])
 
@@ -62,22 +56,20 @@ const GetProfile = ({children}) => {
     setUser(result?.profile)
     
     if(result?.profile?.id){
-      setIsUserPostsLoading(true)
       fetchUsersAllPosts({
         variables: {
           userId: result?.profile?.id
         }
       })
-      setIsUserPostsLoading(false)
     }
   }, [result])
 
   useEffect(() => {
-    if(Posts?.Posts?.success) setAllPosts(Posts?.Posts?.posts)
+    if(Posts?.Posts?.success) setAllPosts(Posts?.Posts)
   }, [Posts])
 
   useEffect(() => {
-    if(usersPosts?.userPosts?.success) setUsersAllPosts(usersPosts?.userPosts?.posts)
+    if(usersPosts?.userPosts?.success) setUsersAllPosts(usersPosts?.userPosts)
   }, [usersPosts])
   
   return children

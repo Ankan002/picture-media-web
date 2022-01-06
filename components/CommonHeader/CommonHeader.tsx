@@ -2,7 +2,7 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import {IoMdArrowRoundBack} from 'react-icons/io'
 
-const CreatePostHeader = () => {
+const CommonHeader = () => {
 
     const router = useRouter()
 
@@ -21,4 +21,4 @@ const CreatePostHeader = () => {
     )
 }
 
-export default CreatePostHeader
+export default CommonHeader

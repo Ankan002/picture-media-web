@@ -37,7 +37,8 @@ const ProfilePostsBody = () => {
                                                 likes={userPost?.likes}
                                                 photo={userPost?.photo}
                                                 title={userPost?.title}
-                                                liked_users={userPost?.liked_users} 
+                                                liked_users={userPost?.liked_users}
+                                                id={userPost?.id} 
                                             />
                                         </div>
                                     ))

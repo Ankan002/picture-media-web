@@ -7,3 +7,13 @@ export const SIGN_IN = gql`
         }
     }
 `
+
+export const DELETE_POST = gql`
+    mutation($post: PostInput!){
+        deletePost(post: $post) {
+            message
+            postId
+            success
+        }
+    }
+`

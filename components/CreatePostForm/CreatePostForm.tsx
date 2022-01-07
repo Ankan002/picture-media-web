@@ -84,7 +84,7 @@ const CreatePostForm = () => {
       return
     }
 
-    const newUserPosts = [response?.post].concat(usersPosts?.posts)
+    const newUserPosts = [{...response?.post, id: response?.post?._id}].concat(usersPosts?.posts)
     setUsersPosts({...usersPosts, posts: newUserPosts})
 
     const user = {
@@ -95,7 +95,7 @@ const CreatePostForm = () => {
 
     console.log(response)
 
-    const modifiedResponse = {...response?.post, user}
+    const modifiedResponse = {...response?.post, user, id: response?.post?._id}
 
     const newAllPosts = [modifiedResponse].concat(allPosts?.posts)
     setAllPosts({...allPosts, posts: newAllPosts})

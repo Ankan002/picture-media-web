@@ -3,37 +3,31 @@ import {RiDeleteBinFill} from 'react-icons/ri'
 import {AiFillHeart, AiOutlineHeart} from 'react-icons/ai'
 import { useRecoilState } from 'recoil'
 import { userProfile } from '../../atom/userProfileAtom'
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import { useRouter } from 'next/router'
 
 export type ProfilePostCardProps = {
     userId: string | number,
     photo: string | null,
     title: string | null,
     likes: string | number | null,
-    liked_users: Array<string | number | null>
+    liked_users: Array<string | number | null>,
+    id: string | number | null,
 }
 
 const ProfilePostCard = (props: ProfilePostCardProps) => {
 
-    const {userId, photo, title, liked_users, likes} = props
+    const {userId, photo, title, liked_users, likes, id} = props
     const [user, setUser] = useRecoilState<any>(userProfile)
+    const router = useRouter()
 
     const onDustbinClick = () => {
-        confirmAlert({
-            title: 'Confirmation',
-            message: 'Are you sure to Delete this post.',
-            buttons: [
-              {
-                label: 'Yes',
-                onClick: () => console.log('Delete')
-              },
-              {
-                label: 'No',
-                onClick: () => console.log('Cancelled')
-              }
-            ]
-        });
+        router.push({
+            pathname: '/delete-post',
+            query: {
+                postId: id,
+                link: photo
+            }
+        })
     }
 
     console.log(typeof(userId))

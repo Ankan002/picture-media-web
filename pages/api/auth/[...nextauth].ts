@@ -19,7 +19,7 @@ export default NextAuth({
   pages: {
     signIn: '/auth/signin'
   },
-  secret: process.env.NEXT_PUBLIC_SECRET,
+  secret: "uiewatguiwagjkh23658792kjsgajk",
   callbacks:{
     async signIn({ account, profile }) {
 

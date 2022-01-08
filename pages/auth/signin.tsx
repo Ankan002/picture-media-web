@@ -14,7 +14,11 @@ function signin({ providers }) {
     console.log("Providers", providers)
   }, [providers])
 
-  if(session) router.replace('/')
+  useEffect(() => {
+    if(session) router.replace('/')
+  }, [session])
+
+  
 
   return (
     <>

@@ -72,7 +72,8 @@ export default NextAuth({
       }
     },
     async session({ session, token }) {
-      session.accessToken = token.sub
+      console.log("Token", token)
+      if(token) session.accessToken = token.sub
       return session
     },
     async jwt({ token }) {

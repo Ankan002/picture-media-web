@@ -6,6 +6,7 @@ import LoadingComponent from '../LoadingComponent'
 const emptyLogo = require('../../assets/empty.svg')
 import UserProfilePostCard from '../UserProfilePostCard'
 
+
 const UserProfilePostsBody = () => {
 
     const [userPosts, setUserPosts] = useState<any>({})
@@ -20,8 +21,6 @@ const UserProfilePostsBody = () => {
             }
         })
     }, [userId])
-
-    //.posts
 
     useEffect(() => {
         if(postData?.userPosts?.success) setUserPosts(postData?.userPosts)
@@ -54,6 +53,10 @@ const UserProfilePostsBody = () => {
                                                 photo={userPost?.photo}
                                                 title={userPost?.title}
                                                 liked_users={userPost?.liked_users} 
+                                                id={userPost?.id}
+                                                userId={userId}
+                                                currentUserPosts = {userPosts}
+                                                setCurrentUserPosts={setUserPosts}
                                             />
                                         </div>
                                     ))

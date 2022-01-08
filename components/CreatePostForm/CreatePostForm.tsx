@@ -93,8 +93,6 @@ const CreatePostForm = () => {
       image: profile?.image
     }
 
-    console.log(response)
-
     const modifiedResponse = {...response?.post, user, id: response?.post?._id}
 
     const newAllPosts = [modifiedResponse].concat(allPosts?.posts)

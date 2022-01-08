@@ -7,8 +7,7 @@ import { BsFillHeartFill } from "react-icons/bs";
 
 const UserProfileDetail = () => {
   const [user, setUser] = useState<any>({});
-  const [fetchUser, { data: profileData, error }] =
-    useLazyQuery(GET_USER_BY_ID);
+  const [fetchUser, { data: profileData, error }] = useLazyQuery(GET_USER_BY_ID);
   const router = useRouter();
   const userId = router.query.userId;
 

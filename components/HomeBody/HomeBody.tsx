@@ -9,7 +9,6 @@ import MainPostCard from '../MainPostCard'
 const HomeBody = () => {
 
     const [posts, setPosts] = useRecoilState<any>(allPostsData)
-    console.log(posts)
 
     return (
         <div className='w-full flex-grow flex'>
@@ -39,7 +38,8 @@ const HomeBody = () => {
                                                 photo={post?.photo}
                                                 title={post?.title}
                                                 liked_users={post?.liked_users}
-                                                userImage={post?.user?.image} 
+                                                userImage={post?.user?.image}
+                                                id={post?.id}
                                             />
                                             </div>
                                         ))

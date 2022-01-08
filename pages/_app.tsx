@@ -39,7 +39,6 @@ const GetProfile = ({children}) => {
   const [fetchUsersAllPosts, {data: usersPosts, loading: usersPostsLoading, error: usersPostsError}] = useLazyQuery(GET_POSTS_BY_USER)
 
   useEffect(() => {
-    console.log(status)
     if (status === 'unauthenticated') router.replace('/auth/signin')
     if (status === 'loading') return
     if (status === 'authenticated'){

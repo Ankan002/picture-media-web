@@ -1,9 +1,14 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {RiDeleteBinFill} from 'react-icons/ri'
 import {AiFillHeart, AiOutlineHeart} from 'react-icons/ai'
 import { useRecoilState } from 'recoil'
 import { userProfile } from '../../atom/userProfileAtom'
 import { useRouter } from 'next/router'
+import { useMutation } from '@apollo/client'
+import { LIKE_POST } from '../../graphql/mutations'
+import { userPostsData } from '../../atom/userPostsDataAtom'
+import { allPostsData } from '../../atom/allPostsDataAtom'
+
 
 export type ProfilePostCardProps = {
     userId: string | number,
@@ -19,6 +24,9 @@ const ProfilePostCard = (props: ProfilePostCardProps) => {
     const {userId, photo, title, liked_users, likes, id} = props
     const [user, setUser] = useRecoilState<any>(userProfile)
     const router = useRouter()
+    const [likePost, {data: likeData}] = useMutation(LIKE_POST)
+    const [allPosts, setAllPosts] = useRecoilState<any>(allPostsData)
+    const [userPosts, setUserPosts] = useRecoilState<any>(userPostsData)
 
     const onDustbinClick = () => {
         router.push({
@@ -30,7 +38,49 @@ const ProfilePostCard = (props: ProfilePostCardProps) => {
         })
     }
 
-    console.log(typeof(userId))
+    const onLikeClick = () => {
+        likePost({
+            variables: {
+                payload: {
+                    postId: id,
+                    userId: user.id,
+                    user: userId
+                }
+            }
+        })
+    }
+
+    useEffect(() => {
+        if(likeData?.likePost === undefined || Object.keys(likeData?.likePost).length === 0) return
+        if(!(likeData?.likePost?.success)){
+            return
+        }
+        if(likeData?.likePost?.success){
+            let tempAllPosts = (allPosts?.posts).map((post: any) => {
+                if(post?.id !== likeData?.likePost?.post?.id) return post
+
+                const newPost = {...post, likes: likeData?.likePost?.post?.likes, liked_users: likeData?.likePost?.post?.liked_users}
+
+                return newPost
+            })
+
+            setAllPosts({...allPosts, posts: tempAllPosts})
+            
+
+            if(user?.id !== likeData?.likePost?.post?.user) return
+
+            let tempUsersPosts = (userPosts?.posts).map((post: any) => {
+                if(post?.id !== likeData?.likePost?.post?.id) return post
+
+                const newPost = {...post, likes: likeData?.likePost?.post?.likes, liked_users: likeData?.likePost?.post?.liked_users}
+
+                return newPost
+            })
+
+            setUserPosts({...userPosts, posts: tempUsersPosts})
+            
+        }
+    }, [likeData])
 
     return (
         <div className='p-5  w-full flex flex-col items-center'>
@@ -61,11 +111,11 @@ const ProfilePostCard = (props: ProfilePostCardProps) => {
                     <>
                     {
                         (liked_users.includes(user?.id)) ? (
-                            <button className='p-2 flex items-center justify-center'>
-                                <AiFillHeart className='lg:text-2xl md:text-xl text-lg text-red-500' />
+                            <button className='p-2 flex items-center justify-center' onClick={onLikeClick}>
+                                <AiFillHeart className='lg:text-2xl md:text-xl text-lg text-red-500'  />
                             </button>
                         ) : (
-                            <button className='p-2 flex items-center justify-center'>
+                            <button className='p-2 flex items-center justify-center' onClick={onLikeClick}>
                                 <AiOutlineHeart className='lg:text-2xl md:text-xl text-lg text-red-500' />
                             </button>
                         )  

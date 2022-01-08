@@ -1,8 +1,13 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { useRecoilState } from 'recoil'
 import { userProfile } from '../../atom/userProfileAtom'
 import {AiFillHeart, AiOutlineHeart} from 'react-icons/ai'
 import { useRouter } from 'next/router'
+import { useMutation } from '@apollo/client'
+import { LIKE_POST } from '../../graphql/mutations'
+import { userPostsData } from '../../atom/userPostsDataAtom'
+import { allPostsData } from '../../atom/allPostsDataAtom'
+import toast, { Toaster } from 'react-hot-toast';
 
 export type MainPostCardProps = {
     userId: string | number,
@@ -11,13 +16,17 @@ export type MainPostCardProps = {
     likes: string | number | null,
     liked_users: Array<string | number | null>
     userImage: string | null
+    id: string | number | null
 }
 
 const MainPostCard = (props: MainPostCardProps) => {
 
     const [user, setUser] = useRecoilState<any>(userProfile)
-    const {userId, photo, title, likes, liked_users, userImage} =  props
+    const {userId, photo, title, likes, liked_users, userImage, id} =  props
     const router = useRouter()
+    const [likePost, {data: likeData}] = useMutation(LIKE_POST)
+    const [allPosts, setAllPosts] = useRecoilState<any>(allPostsData)
+    const [userPosts, setUserPosts] = useRecoilState<any>(userPostsData)
 
     const onProfileClick = () => {
         router.push({
@@ -28,8 +37,54 @@ const MainPostCard = (props: MainPostCardProps) => {
         })
     }
 
+    const onLikeClick = () => {
+        likePost({
+            variables: {
+                payload: {
+                    postId: id,
+                    userId: user.id,
+                    user: userId
+                }
+            }
+        })
+    }
+
+    useEffect(() => {
+        if(likeData?.likePost === undefined || Object.keys(likeData?.likePost).length === 0) return
+        if(!(likeData?.likePost?.success)){
+            toast.error('Like Failed')
+            return
+        }
+        if(likeData?.likePost?.success){
+            let tempAllPosts = (allPosts?.posts).map((post: any) => {
+                if(post?.id !== likeData?.likePost?.post?.id) return post
+
+                const newPost = {...post, likes: likeData?.likePost?.post?.likes, liked_users: likeData?.likePost?.post?.liked_users}
+
+                return newPost
+            })
+
+            setAllPosts({...allPosts, posts: tempAllPosts})
+            
+
+            if(user?.id !== likeData?.likePost?.post?.user) return
+
+            let tempUsersPosts = (userPosts?.posts).map((post: any) => {
+                if(post?.id !== likeData?.likePost?.post?.id) return post
+
+                const newPost = {...post, likes: likeData?.likePost?.post?.likes, liked_users: likeData?.likePost?.post?.liked_users}
+
+                return newPost
+            })
+
+            setUserPosts({...userPosts, posts: tempUsersPosts})
+            
+        }
+    }, [likeData])
+
     return (
         <div className='p-5  w-full flex flex-col items-center'>
+            <Toaster />
             <div className='w-full flex flex-col items-center relative'>
                 <img src={photo} className='rounded-3xl w-full object-contain block' />
                 <div 
@@ -50,11 +105,11 @@ const MainPostCard = (props: MainPostCardProps) => {
                     <>
                     {
                         (liked_users.includes(user?.id)) ? (
-                            <button className='p-2 flex items-center justify-center'>
+                            <button className='p-2 flex items-center justify-center' onClick={onLikeClick}>
                                 <AiFillHeart className='lg:text-2xl md:text-xl text-lg text-red-500' />
                             </button>
                         ) : (
-                            <button className='p-2 flex items-center justify-center'>
+                            <button className='p-2 flex items-center justify-center' onClick={onLikeClick}>
                                 <AiOutlineHeart className='lg:text-2xl md:text-xl text-lg text-red-500' />
                             </button>
                         )  

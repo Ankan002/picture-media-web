@@ -1,18 +1,24 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { getProviders, signIn, useSession } from "next-auth/react";
 import HeadComponent from '../../components/HeadComponent';
 import {BsGoogle, BsGithub} from 'react-icons/bs';
 import {useRouter} from "next/router";
 const signInLogo = require('../../assets/sign-in-image.svg')
 
-function signin({ providers }) {
+function SignIn() {
 
   const router = useRouter()
   const {data: session, status} = useSession()
+  const [providers, setProviders] = useState<any>()
 
   useEffect(() => {
-    console.log("Providers", providers)
-  }, [providers])
+    (async () => {
+      const myProviders = await getProviders()
+      console.log("Providers", myProviders)
+      if(myProviders) setProviders(myProviders) 
+    })
+    ()
+  }, [])
 
   useEffect(() => {
     if(session) router.replace('/')
@@ -71,4 +77,4 @@ export async function getServerSideProps() {
   };
 }
 
-export default signin;
+export default SignIn;

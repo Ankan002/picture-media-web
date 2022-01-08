@@ -1,3 +1,4 @@
+import React, {useEffect} from 'react';
 import { getProviders, signIn, useSession } from "next-auth/react";
 import HeadComponent from '../../components/HeadComponent';
 import {BsGoogle, BsGithub} from 'react-icons/bs';
@@ -8,6 +9,10 @@ function signin({ providers }) {
 
   const router = useRouter()
   const {data: session, status} = useSession()
+
+  useEffect(() => {
+    console.log("Providers", providers)
+  }, [providers])
 
   if(session) router.replace('/')
 
@@ -20,7 +25,7 @@ function signin({ providers }) {
           Lets Login to the World Of Images with...
         </p>
         <div className="mt-10 flex">
-          {providers && providers.length && Object.values(providers).map((provider: any) => (
+          {providers && Object.values(providers).map((provider: any) => (
             <div key={provider.name}>
               <button
                 className="p-3 bg-[#F05454] rounded-lg text-white my-3 mx-5"

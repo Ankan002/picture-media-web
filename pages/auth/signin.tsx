@@ -5,10 +5,20 @@ import {BsGoogle, BsGithub} from 'react-icons/bs';
 import {useRouter} from "next/router";
 const signInLogo = require('../../assets/sign-in-image.svg')
 
-function SignIn({ providers }) {
+function SignIn() {
 
   const router = useRouter()
   const {data: session, status} = useSession()
+  const [providers, setProviders] = useState<any>()
+
+  useEffect(() => {
+    (async () => {
+      const myProviders = await getProviders()
+      console.log("Providers", myProviders)
+      if(myProviders) setProviders(myProviders) 
+    })
+    ()
+  }, [])
 
   useEffect(() => {
     if(session) router.replace('/')

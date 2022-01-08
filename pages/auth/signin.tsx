@@ -20,7 +20,7 @@ function signin({ providers }) {
           Lets Login to the World Of Images with...
         </p>
         <div className="mt-10 flex">
-          {Object.values(providers).map((provider: any) => (
+          {providers && providers.length && Object.values(providers).map((provider: any) => (
             <div key={provider.name}>
               <button
                 className="p-3 bg-[#F05454] rounded-lg text-white my-3 mx-5"

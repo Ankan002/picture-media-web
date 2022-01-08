@@ -52,7 +52,7 @@ const GetProfile = ({children}) => {
   }, [status])
 
   useEffect(() => {
-    setUser(result?.profile)
+    if(result) setUser(result?.profile)
     
     if(result?.profile?.id){
       fetchUsersAllPosts({

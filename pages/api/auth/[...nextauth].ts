@@ -73,7 +73,6 @@ export default NextAuth({
       }
     },
     async session({ session, token }) {
-      console.log("Token", token)
       if(token) session.accessToken = token.sub
       return session
     },

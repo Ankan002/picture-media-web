@@ -14,7 +14,6 @@ function SignIn() {
   useEffect(() => {
     (async () => {
       const myProviders = await getProviders()
-      console.log("Providers", myProviders)
       if(myProviders) setProviders(myProviders) 
     })
     ()

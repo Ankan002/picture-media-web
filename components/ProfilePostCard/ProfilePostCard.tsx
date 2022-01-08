@@ -85,7 +85,7 @@ const ProfilePostCard = (props: ProfilePostCardProps) => {
     return (
         <div className='p-5  w-full flex flex-col items-center'>
             <div className='w-full flex flex-col items-center relative'>
-                <img src={photo} className='rounded-3xl object-contain block' />
+                <img src={photo} className='rounded-3xl block' />
                 <div 
                     className='absolute top-0 bottom-0 w-full h-full opacity-0 hover:opacity-80 bg-black p-5 rounded-3xl flex justify-center items-center hover:cursor-pointer transition-all ease-in-out delay-100'
                 >
